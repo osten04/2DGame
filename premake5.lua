@@ -3,17 +3,18 @@
 workspace "Project"
    configurations { "Debug", "Release" }
 
-filter "configurations:Debug"
-   defines { "DEBUG" }
-   symbols "On"
+   architecture "x86_64"
 
-filter "configurations:Release"
-   defines { "RELEASE" }
-   optimize "On"
+   cppdialect   "c++20"
+   cdialect     "C17"
 
+   filter "configurations:Debug"
+      defines { "DEBUG" }
+      symbols "On"
 
-cppdialect "c++20"
-cdialect   "C17"
+   filter "configurations:Release"
+      defines { "RELEASE" }
+      optimize "On"
 
 dofile ( "Base/premake.lua"   )
 dofile ( "Editor/premake.lua" )
