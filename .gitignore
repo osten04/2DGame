@@ -1,10 +1,3 @@
-﻿*.sln
-*.vcxproj
+﻿Out
 .vs
-*.filters
-Base/bin
-Base/obj
-*.user
-Editor/bin
-Editor/obj
-Game/bin
+*.sln

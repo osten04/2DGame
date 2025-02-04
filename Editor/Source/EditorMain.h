@@ -1,2 +1,1 @@
-
-extern "C" int EditorMain();
+__declspec(dllexport) int EditorMain();

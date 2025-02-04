@@ -8,6 +8,9 @@ workspace "Project"
    cppdialect   "c++20"
    cdialect     "C17"
 
+   targetdir "Out/Bin/%{cfg.buildcfg}"
+   objdir    "Out/Obj/%{cfg.buildcfg}"
+
    filter "configurations:Debug"
       defines { "DEBUG" }
       symbols "On"

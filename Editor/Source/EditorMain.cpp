@@ -2,12 +2,10 @@
 
 #include <iostream>
 
-extern "C"
-{
-	int EditorMain()
-	{
-		printf("test\n");
 
-		return 0;
-	}
+int EditorMain()
+{
+	printf("Hello World\n");
+
+	return 0;
 }
