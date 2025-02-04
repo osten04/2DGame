@@ -1,12 +1,15 @@
 project "Base"
-   kind "ConsoleApp"
-   language "C++"
+   DefaultConf "ConsoleApp"
 
-   includedirs { "../Editor/Source" }
 
-   files { "Source/**.h", "Source/**.cpp" }
+   includedirs { 
+      GetSource( "Editor" ),
+      GetSource( "OpenGL" )
+   }
 
-   location "../Out/Sln"
+   links {
+      "OpenGL",
+      "Editor"
+   }
 
-   links "Editor"
-   dependson { "editor" }
+   dependson { "Editor" }

@@ -1,7 +1,12 @@
 project "Editor"
-   kind "SharedLib"
-   language "C++"
+   DefaultConf "SharedLib"
    
-   files { "Source/**.h", "Source/**.cpp" }
+   includedirs { 
+      GetSource( "OpenGL" ),
+      GetSource( "ImGUI"  )
+   }
 
-   location "../Out/Sln"
+   links {
+      "OpenGL",
+      "ImGUI"
+   }
