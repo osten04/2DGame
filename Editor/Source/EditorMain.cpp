@@ -15,6 +15,7 @@
 #if defined(IMGUI_IMPL_OPENGL_ES2)
 #include <GLES2/gl2.h>
 #endif
+#include "glad/glad.h"
 #include <GLFW/glfw3.h> // Will drag system OpenGL headers
 
 // [Win32] Our example includes a copy of glfw3.lib pre-compiled with VS2010 to maximize ease of testing and compatibility with old VS compilers.
@@ -68,8 +69,8 @@ __declspec(dllexport) int EditorMain()
     const char* glsl_version = "#version 460";
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
-    //glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+ only
-    //glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);            // 3.0+ only
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+ only
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);            // 3.0+ only
 #endif
 
     // Create window with graphics context
@@ -77,7 +78,9 @@ __declspec(dllexport) int EditorMain()
     if (window == nullptr)
         return 1;
     glfwMakeContextCurrent(window);
-    glfwSwapInterval(0); // Enable vsync
+    glfwSwapInterval(1); // Enable vsync
+
+    gladLoadGL();
 
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
@@ -119,7 +122,11 @@ __declspec(dllexport) int EditorMain()
     bool show_another_window = false;
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
-    if (int error = initBuffers(); error)
+    const GLubyte* str = glGetString(GL_VERSION);
+
+    printf((const char*)str);
+
+    if ( int error = initBuffers(); error )
         return error;
 
     // Main loop
