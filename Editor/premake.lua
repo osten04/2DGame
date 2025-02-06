@@ -1,6 +1,8 @@
 project "Editor"
    DefaultConf "SharedLib"
 
+   dependson { "Game" }
+
    includedirs { 
       GetSource( "OpenGL" ),
       GetSource( "ImGUI"  )
