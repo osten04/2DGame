@@ -3,18 +3,12 @@ project "Editor"
 
    dependson { "Game" }
 
-   includedirs { 
-      GetSource( "OpenGL" ),
-      GetSource( "ImGUI"  )
-   }
+   LinkProject( "OpenGL"    )
+   LinkProject( "ImGUI"     )
+   LinkProject( "Framework" )
 
-   links {
-      "OpenGL",
-      "ImGUI"
-   }
-
-   filter "configurations:Debug"
+   filter "configurations:Debug**"
       defines { "GAMEDLL=\"../Out/Bin/Debug/Game.dll\"" }
       
-   filter "configurations:Release"
+   filter "configurations:Release**"
       defines { "GAMEDLL=\"../Out/Bin/Release/Game.dll\"" }

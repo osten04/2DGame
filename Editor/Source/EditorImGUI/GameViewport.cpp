@@ -6,8 +6,6 @@
 
 #include "DllLayer/DllLoad.h"
 
-bool GameViewport::show_another_window;
-
 void GameViewport::mainLoop()
 {
     ImGui::Begin("Hello, world!");

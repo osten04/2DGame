@@ -1,8 +1,10 @@
-class GameViewport
+#include "Singleton.hpp"
+
+class GameViewport : public Singleton< GameViewport >
 {
 private:
-	static bool show_another_window;
+	bool show_another_window;
 
 public:
-	static void mainLoop();
+	void mainLoop();
 };

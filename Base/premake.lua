@@ -3,14 +3,25 @@ project "Base"
 
    debugdir "../Game"
 
-   includedirs { 
-      GetSource( "Editor" ),
-      GetSource( "OpenGL" )
-   }
+   filter "configurations:**Editor"
+   
+      defines { "EDITOR" }
 
-   links {
-      "OpenGL",
-      "Editor"
-   }
-
-   dependson { "Editor" }
+      includedirs { 
+         GetSource( "Editor" ),
+         GetSource( "OpenGL" )
+      }
+      
+      links {
+         "OpenGL",
+         "Editor",
+         "Dbghelp"
+      }
+      
+      dependson { "Editor" }
+   
+   filter "configurations:not **Editor"
+   
+      dependson   "Game"
+      LinkProject "Game"
+      LinkProject "OpenGL"

@@ -139,12 +139,12 @@ GLenum DrawGL( int _width, int _height )
 
 extern "C"
 {
-	int init( void )
+	int __declspec( dllexport ) init( void )
 	{
 		return initBuffers();
 	}
 
-	int close(void)
+	int __declspec(dllexport) close(void)
 	{
 		glDeleteTextures    ( 1, &textureColorbuffer );
 		glDeleteFramebuffers( 1, &fbo );
@@ -155,7 +155,7 @@ extern "C"
 		return 0;
 	}
 
-	GLenum draw( int _width, int _height )
+	GLenum __declspec( dllexport ) draw( int _width, int _height )
 	{
 		return DrawGL( _width, _height );
 	}

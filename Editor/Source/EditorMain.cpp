@@ -56,6 +56,8 @@ __declspec(dllexport) int EditorMain()
     bool show_another_window = false;
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
+    GameViewport::init();
+
     while (!glfwWindowShouldClose(window))
     {
         glfwPollEvents();
@@ -70,7 +72,7 @@ __declspec(dllexport) int EditorMain()
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
-        GameViewport::mainLoop();
+        GameViewport::GetR().mainLoop();
 
         // Rendering
         ImGui::Render();
