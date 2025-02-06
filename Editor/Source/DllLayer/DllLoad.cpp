@@ -15,9 +15,11 @@ HINSTANCE hGetProcIDDLL = nullptr;
 
 int InitGameDll( void )
 {
-    //CopyFile( TEXT( GAMEDLL ), L"temp/game.dll", false );
+    CreateDirectory( L"../Out/Temp", NULL );
 
-    hGetProcIDDLL = LoadLibrary( TEXT( GAMEDLL ) );
+    CopyFile( TEXT( GAMEDLL ), L"../Out/Temp/game.dll", false );
+
+    hGetProcIDDLL = LoadLibrary( L"../Out/Temp/game.dll" );
 
     if (!hGetProcIDDLL) {
         std::cout << "could not load the dynamic library" << std::endl;
