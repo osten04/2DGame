@@ -5,10 +5,12 @@
 
 #define GAMEAPI extern "C"
 
-GAMEAPI typedef int ( *initFunc )(void);
-GAMEAPI typedef int ( *DrawFunc )( int, int );
+GAMEAPI typedef int    ( *initFunc  )( void );
+GAMEAPI typedef int    ( *closeFunc )( void );
+GAMEAPI typedef GLenum ( *DrawFunc  )( int, int );
 
-DrawFunc DLLDraw;
+DrawFunc  DLLDraw;
+closeFunc DLLClose;
 HINSTANCE hGetProcIDDLL = nullptr;
 
 #include <string>
@@ -39,6 +41,12 @@ int InitGameDll( void )
         return EXIT_FAILURE;
     }
 
+    DLLClose = (closeFunc)GetProcAddress(hGetProcIDDLL, "close");
+    if (!DLLDraw) {
+        std::cout << "could not locate the function" << std::endl;
+        return EXIT_FAILURE;
+    }
+
     return dllInit();
 }
 
@@ -47,13 +55,14 @@ int unload(void)
     if ( !hGetProcIDDLL )
         return 0;
 
+    DLLClose();
     FreeLibrary( hGetProcIDDLL );
     hGetProcIDDLL = nullptr;
 
     return 0;
 }
 
-int DrawGameDll(int width, int height)
+GLenum DrawGameDll(int width, int height)
 { 
     return DLLDraw( width, height );
 }

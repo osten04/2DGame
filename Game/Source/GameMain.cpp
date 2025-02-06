@@ -21,6 +21,9 @@ GLuint shaderProgram = 0;
 
 GLuint VBO, VAO;
 
+GLenum fbo, textureColorbuffer;
+
+
 int initBuffers()
 {
 	gladLoadGL();
@@ -95,24 +98,23 @@ int initBuffers()
 	glBindBuffer(GL_ARRAY_BUFFER, 0); // Note that this is allowed, the call to glVertexAttribPointer registered VBO as the currently bound vertex buffer object so afterwards we can safely unbind
 
 	glBindVertexArray(0);
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	glGenFramebuffers(1, &fbo);
+
+	glGenTextures(1, &textureColorbuffer);
 
 	return 0;
 }
 
 GLenum DrawGL( int _width, int _height )
 {
-
 	glViewport(0, 0, _width, _height);
 
-	unsigned int fbo;
-	glGenFramebuffers(1, &fbo);
+	if( fbo )
+
 	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 
-
 	// generate texture
-	unsigned int textureColorbuffer;
-	glGenTextures(1, &textureColorbuffer);
 	glBindTexture(GL_TEXTURE_2D, textureColorbuffer);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, _width, _height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -122,24 +124,17 @@ GLenum DrawGL( int _width, int _height )
 	// attach it to currently bound framebuffer object
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureColorbuffer, 0);
 
-	unsigned int rbo;
-	glGenRenderbuffers(1, &rbo);
-	glBindRenderbuffer(GL_RENDERBUFFER, rbo);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, _width, _height );
-	glBindRenderbuffer(GL_RENDERBUFFER, 0);
-
-	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo);
-
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 		std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << std::endl;
 
 	glUseProgram(shaderProgram);
 	glBindVertexArray(VAO);
-	glDrawArrays( GL_TRIANGLES, 0, 6 ); // We set the count to 6 since we're drawing 6 vertices now (2 triangles); not 3!
+	glDrawArrays( GL_TRIANGLES, 0, 9 ); // We set the count to 6 since we're drawing 6 vertices now (2 triangles); not 3!
 	glBindVertexArray(0);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	return fbo;
+
+	return textureColorbuffer;
 }
 
 extern "C"
@@ -149,7 +144,18 @@ extern "C"
 		return initBuffers();
 	}
 
-	int draw( int _width, int _height )
+	int close(void)
+	{
+		glDeleteTextures    ( 1, &textureColorbuffer );
+		glDeleteFramebuffers( 1, &fbo );
+		glDeleteBuffers     ( 1, &VBO );
+		glDeleteVertexArrays( 1, &VAO );
+		glDeleteProgram     ( shaderProgram );
+
+		return 0;
+	}
+
+	GLenum draw( int _width, int _height )
 	{
 		return DrawGL( _width, _height );
 	}

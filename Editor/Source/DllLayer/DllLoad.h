@@ -1,3 +1,5 @@
+#include <glad/glad.h>
+
 int InitGameDll(void);
 int unload(void);
-int DrawGameDll( int width, int height );
+GLenum DrawGameDll( int width, int height );
