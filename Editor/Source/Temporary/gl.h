@@ -1,3 +1,0 @@
-
-void drawGame();
-int initBuffers();

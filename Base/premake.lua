@@ -1,6 +1,7 @@
 project "Base"
    DefaultConf "ConsoleApp"
 
+   debugdir "../Game"
 
    includedirs { 
       GetSource( "Editor" ),

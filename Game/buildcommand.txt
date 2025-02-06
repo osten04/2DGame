@@ -1,0 +1,1 @@
+msbuild Out/Sln/Game.vcxproj /p:Configuration=Release /p:Platform=x64

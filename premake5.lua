@@ -27,7 +27,7 @@ workspace "Project"
    objdir    "Out/Obj/%{cfg.buildcfg}"
 
    libdirs { "Libs" }
-
+   
    filter "configurations:Debug"
       defines { "DEBUG" }
       symbols "On"
