@@ -8,25 +8,31 @@
 
 void GameViewport::mainLoop()
 {
-    ImGui::Begin("Hello, world!");
-    if (ImGui::Checkbox("Another Window", &show_another_window))
+    if (ImGui::Begin( "Dummy", NULL, ImGuiWindowFlags_NoCollapse ) )
     {
+        ImGuiStyle& style = ImGui::GetStyle();
+
+        float size = style.FramePadding.x * 2.0f;
+        float avail = ImGui::GetContentRegionAvail().x;
+
+        float off = (avail - size) * 0.5f;
+        if (off > 0.0f)
+            ImGui::SetCursorPosX(ImGui::GetCursorPosX() + off);
+
+        if ( ImGui::Checkbox( " ", &show_another_window ) )
+        {
+            if (show_another_window)
+            {
+                InitGameDll();
+            }
+            else
+            {
+                unload();
+            }
+        }
+
+        // 3. Show another simple window.
         if (show_another_window)
-        {
-            InitGameDll();
-        }
-        else
-        {
-            unload();
-        }
-    }
-    ImGui::End();
-
-
-    // 3. Show another simple window.
-    if (show_another_window)
-    {
-        ImGui::Begin("GameWindow");
         {
             // Using a Child allow to fill all the space of the window.
             // It also alows customization
@@ -40,6 +46,6 @@ void GameViewport::mainLoop()
             //glDeleteTextures(1, &texid);
             ImGui::EndChild();
         }
-        ImGui::End();
     }
+    ImGui::End();
 }

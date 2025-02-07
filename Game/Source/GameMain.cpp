@@ -129,7 +129,7 @@ GLenum DrawGL( int _width, int _height )
 
 	glUseProgram(shaderProgram);
 	glBindVertexArray(VAO);
-	glDrawArrays( GL_TRIANGLES, 0, 9 ); // We set the count to 6 since we're drawing 6 vertices now (2 triangles); not 3!
+	glDrawArrays( GL_TRIANGLES, 0, 9 );
 	glBindVertexArray(0);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);

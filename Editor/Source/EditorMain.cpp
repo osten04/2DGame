@@ -1,4 +1,3 @@
-
 #include "imgui.h"
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
@@ -27,9 +26,12 @@ __declspec(dllexport) int EditorMain()
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+    //glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
+
+    //glfwWindowHint(GLFW_VISIBLE, GL_FALSE);
 
     // Create window with graphics context
-    GLFWwindow* window = glfwCreateWindow(1280, 720, "Dear ImGui GLFW+OpenGL3 example", nullptr, nullptr);
+    GLFWwindow* window = glfwCreateWindow(900, 600, "Dummy", nullptr, nullptr);
     if (window == nullptr)
         return 1;
     glfwMakeContextCurrent(window);
@@ -40,9 +42,11 @@ __declspec(dllexport) int EditorMain()
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    ImGuiIO& io = ImGui::GetIO();
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+    //io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 
     // Setup Dear ImGui style
     ImGui::StyleColorsDark();
@@ -54,7 +58,7 @@ __declspec(dllexport) int EditorMain()
     ImGui_ImplOpenGL3_Init(glsl_version);
 
     bool show_another_window = false;
-    ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+    ImVec4 clear_color = ImVec4(0.0f, 0.0f, 0.0f, 0.0f);
 
     GameViewport::init();
 
@@ -72,10 +76,42 @@ __declspec(dllexport) int EditorMain()
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
+        float padding = 5;
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(padding, padding));
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 3.0f);
+
+        if (ImGui::BeginMainMenuBar())
+        {
+            if (ImGui::BeginMenu("File"))
+            {
+                ImGui::EndMenu();
+            }
+
+            float button_height = 20;
+            float button_width = 60;
+            ImGui::SameLine();
+            ImGui::Button("Button", ImVec2(button_width, button_height));
+            ImGui::EndMainMenuBar();
+        }
+
+        ImGui::DockSpaceOverViewport();
+
         GameViewport::GetR().mainLoop();
+
+        ImGui::PopStyleVar(3);
 
         // Rendering
         ImGui::Render();
+
+        // Update and Render additional Platform Windows
+        if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+        {
+            ImGui::UpdatePlatformWindows();
+            ImGui::RenderPlatformWindowsDefault();
+            // TODO for OpenGL: restore current GL context.
+        }
+
         int display_w, display_h;
         glfwGetFramebufferSize(window, &display_w, &display_h);
         glViewport(0, 0, display_w, display_h);
