@@ -3,6 +3,7 @@ project "Editor"
 
    dependson { "Game" }
 
+   links( "dwmapi" )
    LinkProject( "OpenGL"    )
    LinkProject( "ImGUI"     )
    LinkProject( "Framework" )

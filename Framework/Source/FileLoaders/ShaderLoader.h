@@ -1,0 +1,1 @@
+unsigned int loadShader( const char* _path, unsigned int _type);

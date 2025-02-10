@@ -6,33 +6,87 @@
 
 #include "DllLayer/DllLoad.h"
 
+void AlignForWidth(float width, float alignment = 0.5f)
+{
+    ImGuiStyle& style = ImGui::GetStyle();
+    float avail = ImGui::GetContentRegionAvail().x;
+    float off = (avail - width) * alignment;
+    if (off > 0.0f)
+        ImGui::SetCursorPosX(ImGui::GetCursorPosX() + off);
+}
+
 void GameViewport::mainLoop()
 {
-    if (ImGui::Begin( "Dummy", NULL, ImGuiWindowFlags_NoCollapse ) )
+
+    if (ImGui::Begin( "Dummy", NULL, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_MenuBar ) )
     {
-        ImGuiStyle& style = ImGui::GetStyle();
-
-        float size = style.FramePadding.x * 2.0f;
-        float avail = ImGui::GetContentRegionAvail().x;
-
-        float off = (avail - size) * 0.5f;
-        if (off > 0.0f)
-            ImGui::SetCursorPosX(ImGui::GetCursorPosX() + off);
-
-        if ( ImGui::Checkbox( " ", &show_another_window ) )
+        if (ImGui::BeginMenuBar())
         {
-            if (show_another_window)
+            if (ImGui::BeginMenu("Menu"))
             {
-                InitGameDll();
+                ImGui::MenuItem("Console", NULL );
+                ImGui::EndMenu();
+            }
+            ImGui::EndMenuBar();
+        }
+
+        ImVec2 buttonSize( 20, 20 );
+
+        float width = ImGui::GetStyle().ItemSpacing.x;
+
+        if ( m_GameRunning )
+            width += buttonSize.x * 3;
+        else
+            width += buttonSize.x;
+        AlignForWidth(width);
+
+        auto& io = ImGui::GetIO();
+
+        m_GameRunning;
+
+        if (m_GameRunning)
+            ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor(0xff4d40bd));
+        else
+            ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor(0xff7ee07e));
+        
+        if ( ImGui::Button("##Start", buttonSize) )
+        {
+            if (m_GameRunning)
+            {
+                UnloadGameDll();
+                m_GameRunning = false;
             }
             else
             {
-                unload();
+
+                InitGameDll();
+                m_GameRunning = true;
             }
+        }
+        ImGui::PopStyleColor(1);
+
+        if (m_GameRunning)
+        {
+
+            ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor(0xffb2b2b2));
+            ImGui::SameLine();
+            if( ImGui::Button( "##Break", buttonSize) )
+                printf( "Break\n" );
+
+
+            ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor(0xffca9146));
+            ImGui::SameLine();
+            if (ImGui::Button("##Restart", buttonSize))
+            {
+                UnloadGameDll();
+                InitGameDll();
+            }
+
+            ImGui::PopStyleColor(2);
         }
 
         // 3. Show another simple window.
-        if (show_another_window)
+        if (m_GameRunning)
         {
             // Using a Child allow to fill all the space of the window.
             // It also alows customization

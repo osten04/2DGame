@@ -18,7 +18,7 @@ project "Base"
          "Dbghelp"
       }
       
-      dependson { "Editor" }
+      dependson { "Editor", "Premake" }
    
    filter "configurations:not **Editor"
    

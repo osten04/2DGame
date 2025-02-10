@@ -2,3 +2,7 @@
 .vs
 *.sln
 Game/imgui.ini
+.idea
+*.user
+*.vcxproj
+*.filters

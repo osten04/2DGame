@@ -21,32 +21,36 @@ function LinkProject( _project )
 end
 
 workspace "Project"
-   configurations { "Debug", "Release", "Debug Editor", "Release Editor" }
+    configurations { "Debug", "Release", "Debug Editor", "Release Editor" }
 
-   architecture "x86_64"
+    architecture "x86_64"
 
-   cppdialect "c++20"
-   cdialect   "C17"
+    cppdialect "c++20"
+    cdialect   "C17"
 
+    libdirs { "Libs" }
    
+    filter "configurations:Debug**"
+        defines { "DEBUG" }
+        symbols "On"
+        targetdir "Out/Bin/Debug"
+        objdir    "Out/Obj/Debug"
 
-   libdirs { "Libs" }
-   
-   filter "configurations:Debug**"
-      defines { "DEBUG" }
-      symbols "On"
-      targetdir "Out/Bin/Debug"
-      objdir    "Out/Obj/Debug"
+    filter "configurations:Release**"
+        defines { "RELEASE" }
+        optimize "On"
+        targetdir "Out/Bin/Release"
+        objdir    "Out/Obj/Release"
 
-   filter "configurations:Release**"
-      defines { "RELEASE" }
-      optimize "On"
-      targetdir "Out/Bin/Release"
-      objdir    "Out/Obj/Release"
+project "Premake"
+    location "Out/Sln"
+    kind  "Utility"
+    prebuildcommands { "$(SolutionDir)premake5.exe --file=$(SolutionDir)premake5.lua vs2022" }
+    files { "**/premake.lua", "premake.lua" }
 
-   dofile ( "Framework/premake.lua" )
-   dofile ( "Base/premake.lua"      )
-   dofile ( "OpenGL/premake.lua"    )
-   dofile ( "ImGUI/premake.lua"     )
-   dofile ( "Editor/premake.lua"    )
-   dofile ( "Game/premake.lua"      )
+dofile ( "Framework/premake.lua" )
+dofile ( "Base/premake.lua"      )
+dofile ( "OpenGL/premake.lua"    )
+dofile ( "ImGUI/premake.lua"     )
+dofile ( "Editor/premake.lua"    )
+dofile ( "Game/premake.lua"      )

@@ -7,12 +7,39 @@
 
 #include <stdio.h>
 
+#include "EditorImGUI/GameViewport.h"
+
+#include "Windows.h"
+
+#define GLFW_EXPOSE_NATIVE_WIN32
+#include <GLFW/glfw3native.h>
+
+#include <dwmapi.h>
+void tittleBar( GLFWwindow* _glfwWindow )
+{
+    HWND window = glfwGetWin32Window( _glfwWindow );
+
+    BOOL USE_DARK_MODE = true;
+    DwmSetWindowAttribute( window, DWMWINDOWATTRIBUTE::DWMWA_USE_IMMERSIVE_DARK_MODE, &USE_DARK_MODE, sizeof(USE_DARK_MODE) );
+
+    ShowWindow(window, SW_MINIMIZE);
+    ShowWindow(window, SW_RESTORE);
+
+    RECT rcClient;
+    GetWindowRect( window, &rcClient);
+
+    // Inform the application of the frame change.
+    SetWindowPos( window,
+        NULL,
+        rcClient.left, rcClient.top,
+        rcClient.right - rcClient.left, rcClient.bottom - rcClient.top,
+        SWP_FRAMECHANGED);
+}
+
 static void glfw_error_callback(int error, const char* description)
 {
     fprintf(stderr, "GLFW Error %d: %s\n", error, description);
 }
-
-#include "EditorImGUI/GameViewport.h"
 
 // Main code
 __declspec(dllexport) int EditorMain()
@@ -27,17 +54,56 @@ __declspec(dllexport) int EditorMain()
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     //glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
+    //glfwWindowHint(GLFW_TRANSPARENT_FRAMEBUFFER, GLFW_TRUE);
+    //glfwWindowHint(GLFW_MOUSE_PASSTHROUGH, GLFW_TRUE);
 
     //glfwWindowHint(GLFW_VISIBLE, GL_FALSE);
 
+
     // Create window with graphics context
-    GLFWwindow* window = glfwCreateWindow(900, 600, "Dummy", nullptr, nullptr);
+    GLFWwindow* window;
+    /*{
+        int monitorCount;
+        GLFWmonitor** monitors = glfwGetMonitors( &monitorCount );
+
+        int xmin, ymin, xmax, ymax;
+        glfwGetMonitorWorkarea( glfwGetPrimaryMonitor(), &xmin, &ymin, &xmax, &ymax );
+        xmax += xmin;
+        ymax += ymin;
+
+        for (size_t i = 0; i < monitorCount; i++)
+        {
+            int x, y, width, height;
+            glfwGetMonitorWorkarea( monitors[ i ], &x, &y, &width, &height);
+
+            int monitorXmax = x + width;
+            int monitorYmax = y + height;
+
+            if ( x < xmin ) xmin = x;
+            if ( y < ymin ) ymin = y;
+            if ( monitorXmax > xmax ) xmax = monitorXmax;
+            if ( monitorYmax > ymax ) ymax = monitorYmax;
+        }
+        window = glfwCreateWindow( xmax - xmin, ymax - ymin, "Dummy", nullptr, nullptr);
+        glfwSetWindowPos(window, xmin, ymin);
+    }*/
+    window = glfwCreateWindow(900, 600, "", nullptr, nullptr);
+
     if (window == nullptr)
         return 1;
     glfwMakeContextCurrent(window);
     glfwSwapInterval(0); // Enable vsync
 
+
+    tittleBar( window );
+
+    unsigned char byte[ 4 ] = { 0,0,0,0 };
+    GLFWimage image = GLFWimage( 1, 1, byte );
+
+    //glfwSetWindowIcon( window, 1, &image );
+
     gladLoadGL();
+
 
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
@@ -79,24 +145,11 @@ __declspec(dllexport) int EditorMain()
         float padding = 5;
         ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(padding, padding));
-        ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 3.0f);
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 5.0f);
 
-        if (ImGui::BeginMainMenuBar())
-        {
-            if (ImGui::BeginMenu("File"))
-            {
-                ImGui::EndMenu();
-            }
-
-            float button_height = 20;
-            float button_width = 60;
-            ImGui::SameLine();
-            ImGui::Button("Button", ImVec2(button_width, button_height));
-            ImGui::EndMainMenuBar();
-        }
-
+        
         ImGui::DockSpaceOverViewport();
-
+        
         GameViewport::GetR().mainLoop();
 
         ImGui::PopStyleVar(3);

@@ -50,7 +50,7 @@ int InitGameDll( void )
     return dllInit();
 }
 
-int unload(void)
+int UnloadGameDll(void)
 {
     if ( !hGetProcIDDLL )
         return 0;

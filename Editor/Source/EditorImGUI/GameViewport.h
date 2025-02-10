@@ -3,7 +3,7 @@
 class GameViewport : public Singleton< GameViewport >
 {
 private:
-	bool show_another_window;
+	bool m_GameRunning;
 
 public:
 	void mainLoop();

@@ -1,3 +1,5 @@
+#pragma once
+
 #include <iostream>
 #include <string>
 
@@ -7,6 +9,7 @@ class Singleton
 private:
 	static inline t* Instance = nullptr;
 public:
+	virtual ~Singleton() = default;
 
 	template< class... ARGS >
 	static void init( ARGS... args )
