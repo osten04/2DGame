@@ -1,8 +1,9 @@
 #include "Assets/cAsset.h"
 
-class cSprite : cAsset< cSprite >
+#include "Math/Vector.h"
+
+class cSpriteSolid : cAsset< cSpriteSolid >
 {
-    int temp;
 public:
-    
+    math::sVector2d m_pos;
 };

@@ -1,6 +1,6 @@
 #version 460 core
 
-uniform vec4 u_
+uniform vec4 u_colour;
 
 out vec4 vertexColor; // specify a color output to the fragment shader
 

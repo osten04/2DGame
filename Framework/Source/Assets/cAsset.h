@@ -12,4 +12,6 @@ public:
     {
         cAssetRenderer< t >::getRenderer()->draw( ( t* )this );
     }
+
+    float m_priority = 0.0f;
 };
