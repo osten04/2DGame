@@ -3,10 +3,5 @@ project "Game"
 
    files "Shaders/**.glsl"
 
-   includedirs { 
-      GetSource( "OpenGL" )
-   }
-
-   links {
-      "OpenGL"
-   }
+   LinkProject( "Framework" )
+   LinkProject( "OpenGL" )

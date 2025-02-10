@@ -5,5 +5,6 @@
 class cSpriteSolid : cAsset< cSpriteSolid >
 {
 public:
-    math::sVector2d m_pos;
+    math::sVector2f m_pos;
+    math::sVector4f m_color;
 };

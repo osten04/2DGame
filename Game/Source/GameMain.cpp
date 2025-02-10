@@ -24,6 +24,9 @@ GLuint VBO, VAO;
 GLenum fbo, textureColorbuffer;
 
 
+#include "Sprite/cSpriteManager.h"
+#include "Assets/cAssetManager.h"
+
 int initBuffers()
 {
 	gladLoadGL();
@@ -103,6 +106,12 @@ int initBuffers()
 
 	glGenTextures(1, &textureColorbuffer);
 
+	cAssetManager::init();
+	cSpriteManager::init();
+
+	cSpriteSolid* sprite = cAssetManager::GetR().spawn< cSpriteSolid >();
+	sprite->m_color = { 1.0f, 1.0f, 1.0f, 1.0f };
+
 	return 0;
 }
 
@@ -132,6 +141,8 @@ GLenum DrawGL( int _width, int _height )
 	glDrawArrays( GL_TRIANGLES, 0, 9 );
 	glBindVertexArray(0);
 
+	cAssetManager::GetR().draw();
+
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 	return textureColorbuffer;
@@ -151,6 +162,9 @@ extern "C"
 		glDeleteBuffers     ( 1, &VBO );
 		glDeleteVertexArrays( 1, &VAO );
 		glDeleteProgram     ( shaderProgram );
+
+		cSpriteManager::destroy();
+		cAssetManager::destroy();
 
 		return 0;
 	}

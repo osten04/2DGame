@@ -8,11 +8,11 @@ class cSpriteManager : public cAssetRenderer< cSpriteSolid >
 private:
 	GLuint m_shaderProgram;
 	GLint  m_colorUniformLocation;
-
+	GLint  m_posUniformLocation;
 
 public:
 	cSpriteManager();
 
-protected:
-	void draw( cSpriteSolid* _sprite ) override;
+	void draw( cSpriteSolid* _asset );
 };
+
