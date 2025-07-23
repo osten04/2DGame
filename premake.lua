@@ -4,9 +4,9 @@ function DefaultConf( _type )
    kind ( _type )
    language "C++"
 
-   files { "Source/**.h", "Source/**.cpp", "Source/**.c", "Source/**.hpp" }
+   files { "Source/**.h", "Source/**.cpp", "Source/**.c", "Source/**.hpp", "Source/**.inl" }
 
-   location "Source"
+   location "./"
 
    includedirs { "Source" }
 end	
@@ -62,3 +62,4 @@ dofile ( "OpenGL/premake.lua"    )
 dofile ( "ImGUI/premake.lua"     )
 dofile ( "Editor/premake.lua"    )
 dofile ( "Game/premake.lua"      )
+dofile ( "GLM/premake.lua"       )

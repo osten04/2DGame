@@ -53,6 +53,7 @@ __declspec(dllexport) int EditorMain()
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+
     //glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
     //glfwWindowHint(GLFW_TRANSPARENT_FRAMEBUFFER, GLFW_TRUE);
     //glfwWindowHint(GLFW_MOUSE_PASSTHROUGH, GLFW_TRUE);
@@ -94,8 +95,8 @@ __declspec(dllexport) int EditorMain()
     glfwMakeContextCurrent(window);
     glfwSwapInterval(0); // Enable vsync
 
-
     tittleBar( window );
+    glfwSetInputMode( window, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE );
 
     unsigned char byte[ 4 ] = { 0,0,0,0 };
     GLFWimage image = GLFWimage( 1, 1, byte );
@@ -150,7 +151,7 @@ __declspec(dllexport) int EditorMain()
         
         ImGui::DockSpaceOverViewport();
         
-        GameViewport::GetR().mainLoop();
+        GameViewport::GetR().mainLoop( window );
 
         ImGui::PopStyleVar(3);
 

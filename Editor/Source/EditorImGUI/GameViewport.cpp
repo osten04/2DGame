@@ -1,8 +1,8 @@
+#include "glad/glad.h"
 #include "GameViewport.h"
 
 #include "imgui.h"
 
-#include "glad/glad.h"
 
 #include "DllLayer/DllLoad.h"
 
@@ -15,7 +15,7 @@ void AlignForWidth(float width, float alignment = 0.5f)
         ImGui::SetCursorPosX(ImGui::GetCursorPosX() + off);
 }
 
-void GameViewport::mainLoop()
+void GameViewport::mainLoop( GLFWwindow* _window )
 {
 
     if (ImGui::Begin( "Dummy", NULL, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_MenuBar ) )
@@ -59,7 +59,7 @@ void GameViewport::mainLoop()
             else
             {
 
-                InitGameDll();
+                InitGameDll( _window );
                 m_GameRunning = true;
             }
         }
@@ -79,7 +79,7 @@ void GameViewport::mainLoop()
             if (ImGui::Button("##Restart", buttonSize))
             {
                 UnloadGameDll();
-                InitGameDll();
+                InitGameDll( _window );
             }
 
             ImGui::PopStyleColor(2);
