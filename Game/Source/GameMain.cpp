@@ -23,13 +23,20 @@ GLuint VBO, VAO;
 
 GLenum fbo, textureColorbuffer;
 
-
-#include "Sprite/cSpriteManager.h"
 #include "Assets/cAssetManager.h"
+#include "Sprite/cSprite.h"
 
-int initBuffers()
+#include "Camera/cCamera.h"
+
+GLFWwindow* window;
+
+int initBuffers( GLFWwindow* _window )
 {
+	glfwInit();
+
 	gladLoadGL();
+
+	window = _window;
 
 	// Build and compile our shader program
 	// Vertex shader
@@ -106,11 +113,13 @@ int initBuffers()
 
 	glGenTextures(1, &textureColorbuffer);
 
-	cAssetManager::init();
-	cSpriteManager::init();
+	//cAssetManager::init();
+	//cSpriteManager::init();
 
-	cSpriteSolid* sprite = cAssetManager::GetR().spawn< cSpriteSolid >();
-	sprite->m_color = { 1.0f, 1.0f, 1.0f, 1.0f };
+	//cSpriteSolid* sprite = cAssetManager::GetR().spawn< cSpriteSolid >();
+	//sprite->m_color = { 1.0f, 1.0f, 1.0f, 1.0f };
+
+	cCamera::Init( window );
 
 	return 0;
 }
@@ -143,6 +152,8 @@ GLenum DrawGL( int _width, int _height )
 
 	cAssetManager::GetR().draw();
 
+	cCamera::getMainCamera()->Update( 0.0f, _width, _height );
+
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 	return textureColorbuffer;
@@ -150,9 +161,9 @@ GLenum DrawGL( int _width, int _height )
 
 extern "C"
 {
-	int __declspec( dllexport ) init( void )
+	int __declspec( dllexport ) init( GLFWwindow* _window )
 	{
-		return initBuffers();
+		return initBuffers( _window );
 	}
 
 	int __declspec(dllexport) close(void)
@@ -163,8 +174,9 @@ extern "C"
 		glDeleteVertexArrays( 1, &VAO );
 		glDeleteProgram     ( shaderProgram );
 
-		cSpriteManager::destroy();
-		cAssetManager::destroy();
+		//cSpriteManager::destroy();
+		//cAssetManager::destroy();
+		cCamera::Deinit();
 
 		return 0;
 	}

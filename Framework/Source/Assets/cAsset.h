@@ -4,13 +4,14 @@
 
 #include "iAsset.h"
 
-template < class t >
-class cAsset : iAsset
+template< class t >
+class cAsset : public iAsset
 {
+private:
 public:
-    void draw() override
+    void draw()
     {
-        cAssetRenderer< t >::getRenderer()->draw( ( t* )this );
+        cAssetRenderer< t >::GetR().draw( this );
     }
 
     float m_priority = 0.0f;

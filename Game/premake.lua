@@ -5,3 +5,4 @@ project "Game"
 
    LinkProject( "Framework" )
    LinkProject( "OpenGL" )
+   LinkProject( "GLM" )

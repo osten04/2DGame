@@ -5,7 +5,7 @@
 
 #define GAMEAPI extern "C"
 
-GAMEAPI typedef int    ( *initFunc  )( void );
+GAMEAPI typedef int    ( *initFunc  )( GLFWwindow* );
 GAMEAPI typedef int    ( *closeFunc )( void );
 GAMEAPI typedef GLenum ( *DrawFunc  )( int, int );
 
@@ -15,7 +15,7 @@ HINSTANCE hGetProcIDDLL = nullptr;
 
 #include <string>
 
-int InitGameDll( void )
+int InitGameDll( GLFWwindow* _window )
 {
     CreateDirectory( L"../Out/Temp", NULL );
 
@@ -47,7 +47,7 @@ int InitGameDll( void )
         return EXIT_FAILURE;
     }
 
-    return dllInit();
+    return dllInit( _window );
 }
 
 int UnloadGameDll(void)

@@ -1,18 +1,16 @@
-#include "glad/glad.h"
+#pragma once
 
 #include "Assets/cAssetRenderer.h"
-#include "Sprite/cSprite.h"
 
-class cSpriteManager : public cAssetRenderer< cSpriteSolid >
+class cSpriteManager : public cAssetRenderer< cSpriteManager >
 {
 private:
-	GLuint m_shaderProgram;
-	GLint  m_colorUniformLocation;
-	GLint  m_posUniformLocation;
+	unsigned int m_shaderProgram;
 
 public:
 	cSpriteManager();
 
-	void draw( cSpriteSolid* _asset );
+	virtual void draw( iAsset* _asset ) override;
 };
+
 
