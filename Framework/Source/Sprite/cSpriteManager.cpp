@@ -5,6 +5,7 @@
 
 #include "FileLoaders/ShaderLoader.h"
 
+
 cSpriteManager::cSpriteManager()
     : m_shaderProgram( glCreateProgram() )
 {
