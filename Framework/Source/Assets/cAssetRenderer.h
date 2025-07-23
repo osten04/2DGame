@@ -9,5 +9,5 @@ class cAssetRenderer : public Singleton< t >
 {
 public:
 
-    virtual void draw( iAsset* _asset ) = 0;
+    virtual void draw( iAsset* _sprite, math::sVector2i _screen ) = 0;
 };

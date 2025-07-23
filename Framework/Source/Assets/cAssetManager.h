@@ -24,7 +24,7 @@ public:
         return _t;
     }
 
-    void draw();
+    void draw( math::sVector2i _screen );
     
 };
 

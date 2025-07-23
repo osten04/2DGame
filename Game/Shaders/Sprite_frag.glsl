@@ -6,5 +6,5 @@ out vec4 FragColor;
 
 void main()
 {
-    vertexColor = u_colour;
+    FragColor = u_colour;
 }

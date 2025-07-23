@@ -1,3 +1,6 @@
+#ifndef MATH_VECTOR
+#define MATH_VECTOR
+
 #define DEF_VEC_TYPE( type, sufix )       \
 typedef sVector2< type > sVector2##sufix; \
 typedef sVector3< type > sVector3##sufix; \
@@ -28,3 +31,5 @@ namespace math
 	DEF_VEC_TYPE( double, d )
 	DEF_VEC_TYPE( int, i )
 }
+
+#endif

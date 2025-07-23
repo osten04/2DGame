@@ -10,7 +10,7 @@ private:
 public:
 	cSpriteManager();
 
-	virtual void draw( iAsset* _asset ) override;
+	virtual void draw( iAsset* _sprite, math::sVector2i _screen ) override;
 };
 
 

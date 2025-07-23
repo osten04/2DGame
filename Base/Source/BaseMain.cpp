@@ -152,7 +152,7 @@ int main()
     glEnableVertexAttribArray(0);
     glEnableVertexAttribArray(1);
 
-    init();
+    init( window );
 
     // main loop
     while (!glfwWindowShouldClose(window)) {

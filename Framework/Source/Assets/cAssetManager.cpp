@@ -8,10 +8,10 @@ cAssetManager::~cAssetManager()
     }
 }
 
-void cAssetManager::draw()
+void cAssetManager::draw( math::sVector2i _screen )
 {
     for ( auto element : m_assets )
     {
-        element->draw();
+        element->draw( _screen );
     }
 }

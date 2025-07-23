@@ -24,8 +24,8 @@ unsigned int loadShader( const char* _path, unsigned int _type )
     // Read the file line by line into a string
     std::string str;
 
-    for (std::string line; getline(file, line); ) {
-        str += line;
+    for ( std::string line; getline(file, line); ) {
+        str += line + '\n';
     }
 
     const char* source = str.c_str();

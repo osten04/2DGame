@@ -25,16 +25,36 @@ GLenum fbo, textureColorbuffer;
 
 #include "Assets/cAssetManager.h"
 #include "Sprite/cSprite.h"
+#include "Scene/cScene.h"
 
-#include "Camera/cCamera.h"
 
 GLFWwindow* window;
+
+void GLAPIENTRY
+MessageCallback(GLenum source,
+	GLenum type,
+	GLuint id,
+	GLenum severity,
+	GLsizei length,
+	const GLchar* message,
+	const void* userParam)
+{
+	fprintf(stderr, "GL CALLBACK: %s type = 0x%x, severity = 0x%x, message = %s\n",
+		(type == GL_DEBUG_TYPE_ERROR ? "** GL ERROR **" : ""),
+		type, severity, message);
+}
+
+cScene* CurrentScene = nullptr;
 
 int initBuffers( GLFWwindow* _window )
 {
 	glfwInit();
 
 	gladLoadGL();
+
+	// During init, enable debug output
+	glEnable(GL_DEBUG_OUTPUT);
+	glDebugMessageCallback(MessageCallback, 0);
 
 	window = _window;
 
@@ -113,13 +133,10 @@ int initBuffers( GLFWwindow* _window )
 
 	glGenTextures(1, &textureColorbuffer);
 
-	//cAssetManager::init();
-	//cSpriteManager::init();
+	cAssetManager::init();
+	cSpriteManager::init();
 
-	//cSpriteSolid* sprite = cAssetManager::GetR().spawn< cSpriteSolid >();
-	//sprite->m_color = { 1.0f, 1.0f, 1.0f, 1.0f };
-
-	cCamera::Init( window );
+	CurrentScene = new cScene( window );
 
 	return 0;
 }
@@ -142,19 +159,20 @@ GLenum DrawGL( int _width, int _height )
 	// attach it to currently bound framebuffer object
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureColorbuffer, 0);
 
+	glClear(GL_COLOR_BUFFER_BIT);
+
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 		std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << std::endl;
 
-	glUseProgram(shaderProgram);
-	glBindVertexArray(VAO);
-	glDrawArrays( GL_TRIANGLES, 0, 9 );
-	glBindVertexArray(0);
+	double deltaTime = glfwGetTime();
 
-	cAssetManager::GetR().draw();
+	CurrentScene->Update( deltaTime, { _width, _height } );
 
-	cCamera::getMainCamera()->Update( 0.0f, _width, _height );
+	cAssetManager::GetR().draw( math::sVector2i{ _width, _height } );
 
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glBindFramebuffer( GL_FRAMEBUFFER, 0 );
+
+	glfwSetTime( 0.0 );
 
 	return textureColorbuffer;
 }
@@ -174,9 +192,10 @@ extern "C"
 		glDeleteVertexArrays( 1, &VAO );
 		glDeleteProgram     ( shaderProgram );
 
-		//cSpriteManager::destroy();
-		//cAssetManager::destroy();
-		cCamera::Deinit();
+		delete CurrentScene;
+
+		cSpriteManager::destroy();
+		cAssetManager::destroy();
 
 		return 0;
 	}

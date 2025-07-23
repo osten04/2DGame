@@ -2,16 +2,14 @@
 
 #include "cAssetRenderer.h"
 
-#include "iAsset.h"
-
 template< class t >
 class cAsset : public iAsset
 {
 private:
 public:
-    void draw()
+    void draw( math::sVector2i _screen )
     {
-        cAssetRenderer< t >::GetR().draw( this );
+        cAssetRenderer< t >::GetR().draw( this, _screen );
     }
 
     float m_priority = 0.0f;
