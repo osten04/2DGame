@@ -20,17 +20,17 @@ cCharacter::~cCharacter()
 
 void cCharacter::Update( double _deltaTime )
 {
-	m_vel.x = ( ( int )( ( m_input & right ) > 0 ) - ( int )( ( m_input & left ) > 0) ) * 8.0f;
+	m_vel.x = ( ( int )( ( m_input & right ) > 0 ) - ( int )( ( m_input & left ) > 0) ) * 4.0f;
 
 	m_vel.y -= 9.82f * ( float )_deltaTime;
 
 	if ( m_gounded && m_input & jump )
 	{
-		m_vel.y = 4.0f;
+		m_vel.y = 3.0f;
 	}
 
 	math::sVector2f& pos = m_sprite->m_pos;
-	pos = pos + m_vel * 512.0f * ( float )_deltaTime;
+	pos = pos + m_vel * 1536.0f * ( float )_deltaTime;
 
 	if ( pos.y < 0.0f )
 	{
