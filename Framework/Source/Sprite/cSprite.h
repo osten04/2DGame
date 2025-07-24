@@ -1,3 +1,5 @@
+#pragma once
+
 #include "Assets/cAsset.h"
 
 #include "Math/Vector.h"

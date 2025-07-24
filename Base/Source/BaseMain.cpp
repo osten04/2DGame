@@ -88,7 +88,7 @@ int main()
     }
 
     // create the window
-    int resx = 640, resy = 480;
+    int resx = 1920, resy = 1080;
     GLFWwindow* window = glfwCreateWindow(resx, resy, "GLFW: Creating a window.", NULL, NULL);
 
     // check if the opening of the window failed whatever reason and clean up

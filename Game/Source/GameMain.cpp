@@ -24,6 +24,7 @@ GLuint VBO, VAO;
 GLenum fbo, textureColorbuffer;
 
 #include "Assets/cAssetManager.h"
+#include "Input/cInputManager.h"
 #include "Sprite/cSprite.h"
 #include "Scene/cScene.h"
 
@@ -135,6 +136,7 @@ int initBuffers( GLFWwindow* _window )
 
 	cAssetManager::init();
 	cSpriteManager::init();
+	cInputManager::init( window );
 
 	CurrentScene = new cScene( window );
 
@@ -165,14 +167,13 @@ GLenum DrawGL( int _width, int _height )
 		std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << std::endl;
 
 	double deltaTime = glfwGetTime();
+	glfwSetTime( 0.0 );
 
 	CurrentScene->Update( deltaTime, { _width, _height } );
 
 	cAssetManager::GetR().draw( math::sVector2i{ _width, _height } );
 
 	glBindFramebuffer( GL_FRAMEBUFFER, 0 );
-
-	glfwSetTime( 0.0 );
 
 	return textureColorbuffer;
 }
@@ -196,6 +197,7 @@ extern "C"
 
 		cSpriteManager::destroy();
 		cAssetManager::destroy();
+		cInputManager::destroy();
 
 		return 0;
 	}

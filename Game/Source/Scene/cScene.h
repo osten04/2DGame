@@ -3,6 +3,7 @@
 #include "Math/Vector.h"
 
 class cSpriteSolid;
+class cCharacter;
 
 class cScene
 {
@@ -13,7 +14,5 @@ public:
 	void Update( double _deltatime, const math::sVector2i& _screenSize );
 
 private:
-	double m_time = 0.0;
-
-	cSpriteSolid* m_sprite;
+	cCharacter* m_character;
 };
