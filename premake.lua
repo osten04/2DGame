@@ -47,7 +47,7 @@ workspace "Project"
 project "Premake"
     location "Out/Sln"
     kind  "Utility"
-    prebuildcommands { "$(SolutionDir)premake5.exe --file=$(SolutionDir)premake.lua vs2022" }
+    prebuildcommands { "\"$(SolutionDir)premake5.exe\" --file=\"$(SolutionDir)premake.lua\" vs2022" }
     files {  
         "premake.lua", 
         "**/premake.lua", 
