@@ -65,7 +65,7 @@ void cInputManager::CallCallbacks( const sInput& _input )
 
 void cInputManager::UnSubscribe( void* _owner )
 {
-	for ( int i = m_callbacks.size() - 1; i >= 0; i-- )
+	for ( int i = ( int )m_callbacks.size() - 1; i >= 0; i-- )
 	{
 		if( _owner == m_callbacks[ i ]->GetObject() )
 		{

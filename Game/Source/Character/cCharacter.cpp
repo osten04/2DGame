@@ -41,16 +41,13 @@ void cCharacter::Update( double _deltaTime )
 	}
 	else
 		m_gounded = false;
-
-	printf( "vel: x:%1.6f, y:%2.6f pos: x:%3.6f, y:%4.6f\n", m_vel.x, m_vel.y, pos.y, pos.y );
-
 }
 
 void cCharacter::Input( const sInput& _input )
 {
 	switch ( _input.type )
 	{
-		case sInput::keyboard: 
+		case sInput::keyboard:
 		{
 			switch ( _input.data.key.action )
 			{

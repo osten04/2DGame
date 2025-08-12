@@ -1,6 +1,8 @@
 #ifndef MATH_VECTOR
 #define MATH_VECTOR
 
+#include <cmath>
+
 #define DEF_VEC_TYPE( type, sufix )       \
 typedef sVector2< type > sVector2##sufix; \
 typedef sVector3< type > sVector3##sufix; \
@@ -14,12 +16,18 @@ namespace math
 	{
 		t x, y;
 
-		inline sVector2 operator+=( const sVector2& _other ) { return sVector2{ x + _other.x, y + _other.y }; }
-		inline sVector2 operator+ ( const sVector2& _other ) { return sVector2{ x + _other.x, y + _other.y }; }
-		inline sVector2 operator*=( const sVector2& _other ) { return sVector2{ x * _other.x, y * _other.y }; }
-		inline sVector2 operator* ( const sVector2& _other ) { return sVector2{ x * _other.x, y * _other.y }; }
 
-		inline sVector2 operator* ( float _other ) { return sVector2{ x * _other, y * _other }; }
+
+		constexpr sVector2 operator+=( const sVector2& _other ) const { return sVector2{ x + _other.x, y + _other.y }; }
+		constexpr sVector2 operator+ ( const sVector2& _other ) const { return sVector2{ x + _other.x, y + _other.y }; }
+		constexpr sVector2 operator-=( const sVector2& _other ) const { return sVector2{ x - _other.x, y - _other.y }; }
+		constexpr sVector2 operator- ( const sVector2& _other ) const { return sVector2{ x - _other.x, y - _other.y }; }
+		constexpr sVector2 operator*=( const sVector2& _other ) const { return sVector2{ x * _other.x, y * _other.y }; }
+		constexpr sVector2 operator* ( const sVector2& _other ) const { return sVector2{ x * _other.x, y * _other.y }; }
+
+		constexpr sVector2 operator* ( float _other ) const { return sVector2{ x * _other, y * _other }; }
+
+		constexpr t Length() const { return std::sqrt( x * x + y * y ); }
 	};
 
 	template < typename t >
