@@ -1,7 +1,8 @@
 #include "cCharacter.h"
 
 #include "Input/cInputManager.h"
-#include "Assets/cAssetManager.h"
+
+#include "Assets/Sprite/cSprite.h"
 
 cCharacter::cCharacter( )
 	: m_binds( sKeyBinds{ .left = Input::KeyCode_A, .right = Input::KeyCode_D, .jump = Input::KeyCode_Space } )

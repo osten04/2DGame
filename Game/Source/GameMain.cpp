@@ -21,11 +21,10 @@ GLuint shaderProgram = 0;
 
 GLuint VBO, VAO;
 
-GLenum fbo, textureColorbuffer;
+GLenum fbo, textureColorbuffer, textureDepthbuffer;
 
 #include "Assets/cAssetManager.h"
 #include "Input/cInputManager.h"
-#include "Sprite/cSprite.h"
 #include "Scene/cScene.h"
 
 
@@ -56,6 +55,15 @@ int initBuffers( GLFWwindow* _window )
 	// During init, enable debug output
 	glEnable(GL_DEBUG_OUTPUT);
 	glDebugMessageCallback(MessageCallback, 0);
+	glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
+	glFrontFace(GL_CCW);
+
+	//idk why not working
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LESS);
 
 	window = _window;
 
@@ -71,7 +79,7 @@ int initBuffers( GLFWwindow* _window )
 	if (!success)
 	{
 		glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-		std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
+		std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << '\n';
 	}
 	// Fragment shader
 	GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
@@ -82,7 +90,7 @@ int initBuffers( GLFWwindow* _window )
 	if (!success)
 	{
 		glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
-		std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
+		std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << '\n';
 	}
 	// Link shaders
 	shaderProgram = glCreateProgram();
@@ -133,9 +141,9 @@ int initBuffers( GLFWwindow* _window )
 	glGenFramebuffers(1, &fbo);
 
 	glGenTextures(1, &textureColorbuffer);
+	glGenTextures(1, &textureDepthbuffer);
 
 	cAssetManager::init();
-	cSpriteManager::init();
 	cInputManager::init( window );
 
 	CurrentScene = new cScene( window );
@@ -152,19 +160,26 @@ GLenum DrawGL( int _width, int _height )
 	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 
 	// generate texture
-	glBindTexture(GL_TEXTURE_2D, textureColorbuffer);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, _width, _height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glBindTexture(GL_TEXTURE_2D, 0);
+	glBindTexture( GL_TEXTURE_2D, textureColorbuffer );
+	glTexImage2D( GL_TEXTURE_2D, 0, GL_RGB, _width, _height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL );
+	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+
+	//generate depthTexture
+	glBindTexture(GL_TEXTURE_2D, textureDepthbuffer );
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH24_STENCIL8, _width, _height, 0, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, 0 );
+
+	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
 
 	// attach it to currently bound framebuffer object
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureColorbuffer, 0);
+	glFramebufferTexture2D( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,         GL_TEXTURE_2D, textureColorbuffer, 0 );
+	glFramebufferTexture2D( GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT,  GL_TEXTURE_2D, textureDepthbuffer, 0 );
 
-	glClear(GL_COLOR_BUFFER_BIT);
+	if ( glCheckFramebufferStatus( GL_FRAMEBUFFER ) != GL_FRAMEBUFFER_COMPLETE )
+		std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!\n";
 
-	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-		std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << std::endl;
+	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT );
 
 	double deltaTime = glfwGetTime();
 	glfwSetTime( 0.0 );
@@ -195,7 +210,6 @@ extern "C"
 
 		delete CurrentScene;
 
-		cSpriteManager::destroy();
 		cAssetManager::destroy();
 		cInputManager::destroy();
 

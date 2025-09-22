@@ -4,7 +4,16 @@
 
 void Cursor( GLFWwindow* window, double xpos, double ypos)
 {
-	
+	sInput input = sInput
+	{
+		.type = sInput::eType::mouse,
+		.data = sInput::uData
+		{
+			.mouse = sInput::uData::sMouse{.pos = math::sVector2d{ xpos, ypos } }
+		}
+	};
+
+	cInputManager::GetR().CallCallbacks( input );
 }
 
 sInput::uData::sKey::eAction GetAction( int _action )

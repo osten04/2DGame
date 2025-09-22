@@ -2,8 +2,8 @@
 
 #include "Math/Vector.h"
 
+class cModel;
 class cSpriteSolid;
-class cCharacter;
 
 class cScene
 {
@@ -14,5 +14,6 @@ public:
 	void Update( double _deltatime, const math::sVector2i& _screenSize );
 
 private:
-	cCharacter* m_character;
+	cModel*       m_model;
+	cSpriteSolid* m_sprite;
 };

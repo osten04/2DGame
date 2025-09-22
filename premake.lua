@@ -28,16 +28,20 @@ workspace "Project"
    cppdialect "c++20"
    cdialect   "C17"
 
+   removeunreferencedcodedata ( "off" )
+
    libdirs { "Libs" }
    
    filter "configurations:Debug**"
       defines { "DEBUG" }
       symbols "On"
+      optimize "off"
       targetdir "Out/Bin/Debug"
       objdir    "Out/Obj/Debug"
 
    filter "configurations:Release**"
       defines { "RELEASE" }
+      symbols  "off"
       optimize "On"
       targetdir "Out/Bin/Release"
       objdir    "Out/Obj/Release"

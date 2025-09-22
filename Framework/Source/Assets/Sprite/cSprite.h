@@ -3,7 +3,7 @@
 #include "Assets/cAsset.h"
 
 #include "Math/Vector.h"
-#include "Sprite/cSpriteManager.h"
+#include "Assets/Sprite/cSpriteManager.h"
 
 class cSpriteSolid : public cAsset< cSpriteManager >
 {

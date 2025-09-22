@@ -22,7 +22,7 @@ struct sInput
 
         struct sMouse
         {
-            math::sVector2i pos;
+            math::sVector2d pos;
         };
 
         sKey   key;
@@ -39,29 +39,6 @@ struct sInput
 
     eType type;
     uData data;
-};
-
-class iInput
-{
-public:
-	virtual void CB( const sInput& _input ) = 0;
-    virtual void* GetObject() = 0;
-};
-
-template < class t >
-class cInput : public iInput
-{
-private:
-
-    t* m_instance;
-    void ( t::* m_memberfunc )( const sInput& );
-
-public:
-
-    cInput( t* _instance, void ( t::* memberfunction )( const sInput& ) ) : m_instance( _instance ), m_memberfunc(memberfunction) { }
-
-    virtual void CB( const sInput& _input ) override { ( m_instance->*m_memberfunc )( _input ); }
-    virtual void* GetObject() { return m_instance; }
 };
 
 namespace Input

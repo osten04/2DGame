@@ -97,6 +97,8 @@ int main()
         return -2;
     }
 
+    glfwSetInputMode( window, GLFW_CURSOR, GLFW_CURSOR_DISABLED );
+
     // in principle we can have multiple windows, 
     // so we set the newly created on as "current"
     glfwMakeContextCurrent(window);
@@ -165,6 +167,8 @@ int main()
 
         GLenum tex = draw(resx, resy);
         
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
         // 2. use our shader program when we want to render an object
         glUseProgram(shaderProgram);
         glBindVertexArray(VAO);
@@ -174,7 +178,7 @@ int main()
 
         // swap buffers (replace the old image with a new one)
         // this won't have any visible effect until we add actual drawing
-        glfwSwapBuffers(window);
+        glfwSwapBuffers( window );
     }
 
     close();

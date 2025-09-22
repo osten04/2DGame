@@ -2,7 +2,8 @@
 #include "GLFW/glfw3.h"
 
 #include "input/cInput.hpp"
-#include "Sprite/cSprite.h"
+
+class cSpriteSolid;
 
 struct sKeyBinds
 {
@@ -34,7 +35,7 @@ private:
 
 	eInputsMask GetInputMask( int _input );
 
-	cSpriteSolid* m_sprite;
+	cSpriteSolid* const m_sprite;
 
 	math::sVector2f m_vel = { 0.0f, 0.0f };
 
